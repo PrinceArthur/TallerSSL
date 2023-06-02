@@ -10,7 +10,7 @@ ENV NODE_OPTIONS=--max_old_space_size=800
 
 ENV GENERATE_SOURCEMAP false
 
-RUN npm install
+RUN npm install --fetch-timeout=60000
 
 COPY . /app
 
