@@ -33,42 +33,13 @@ export class LoginComponent {
 login() {
   if(this.loginUserData.email != null && this.loginUserData.password != null) {
 
-    let listener = this.usersRef.snapshotChanges()
-    .pipe(
-      map(actions => actions.map(a => {
-        const data = a.payload.doc.data();
-        const id = a.payload.doc.id;
-        const tries = a.payload.doc.data()['tries'];
-        return { id, tries, ...data };
-      }))
-    ).subscribe(docs => {
-      docs.forEach(doc => {
-        console.log(doc.tries);
-        if (doc.id == this.loginUserData.email) {
-          if (doc.tries < 7) {
-            this.userService.login(this.loginUserData.email, this.loginUserData.password)
+    this.userService.login(this.loginUserData.email, this.loginUserData.password)
               .then(() => {
-                doc.tries = 0;
-                this.usersRef.doc(this.loginUserData.email).update(doc);
-                listener.unsubscribe();
                 this.router.navigate(['./cifrado']);
               })
               .catch(() => {
-                listener.unsubscribe();
                 this.error = "El correo electrónico o la contraseña son incorrectos. Si falla un total de 7 veces su cuenta será bloqueada";
-                this.userService.loginFail(this.loginUserData.email);
               });
-          }
-          else {
-            listener.unsubscribe();
-            this.error = "Su cuenta ha sido bloqueada por intentos fallidos, cmuníquese con el administrador";
-          }
-        }
-      });
-    })
-
-
-    
   }
 }
 
