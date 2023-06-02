@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY package.json /app
 
-ENV NODE_OPTIONS=--max_old_space_size=600
+ENV NODE_OPTIONS=--max_old_space_size=800
 
 ENV GENERATE_SOURCEMAP false
 
